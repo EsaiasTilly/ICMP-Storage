@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-class Program {
+﻿class Program {
   private static Ping ping = new Ping();
 
   public static void Main() {
@@ -9,6 +7,11 @@ class Program {
 
     // Set ping event
     ping.OnReceive += RecievePing;
+
+    // Read IP list
+    var ips = File.ReadAllLines(Config.IP_LIST_PATH);
+    Config.IPS.AddRange(ips);
+    Console.WriteLine("Read " + ips.Length + " IPs");
 
     // Create blocks
     Console.WriteLine("Creating blocks:");

@@ -15,32 +15,15 @@ class Config {
   // Nr of ips to assign to each block
   public static int IPS_PER_BLOCK = 2;
 
-  // The ips to use
-  public static List<string> IPS = new List<string>() {
-    // Google IPs
-    "172.253.62.100",
-    "172.253.62.101",
-    "172.253.62.102",
-    "172.253.62.113",
-    "172.253.62.138",
-    "172.253.62.139",
-    "172.253.122.94",
-
-    // Amazon IPs
-    "54.239.28.85",
-    "205.251.242.103",
-    "176.32.103.205",
-    "52.119.174.16",
-    "52.119.171.206",
-    "52.119.167.231",
-    "54.239.18.172",
-    "54.239.19.238",
-    "52.94.225.242"
-  };
+  // Path to IP list
+  public static string IP_LIST_PATH = "./assets/ips.txt";
 
   /// 
   /// Dynamic config
   /// 
+
+  // IP list
+  public static List<string> IPS = new List<string>();
 
   // Indicates if the program is running
   public static bool running = true;
