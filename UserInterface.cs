@@ -1,30 +1,12 @@
 using System.Text;
 
 class UserInterface {
+  private string currentPath = "/";
+
   public UserInterface() {
     new Thread(() => {
       while(true) {
-        // Show input possibilities
-        Console.WriteLine("\nChoose an option:");
-        Console.WriteLine("1. Write data");
-        Console.WriteLine("2. Read range");
-        Console.WriteLine("3. Exit");
-        Console.Write("\n> ");
-
-        // Get user input
-        var input = Console.ReadLine();
-
-        // Write data
-        if (input == "1") writeData();
-
-        // Read data from a range
-        else if (input == "2") readRange();
-
-        // Exit
-        else if (input == "3") {
-          Config.running = false;
-          break;
-        }
+        
       }
     }).Start();
   }

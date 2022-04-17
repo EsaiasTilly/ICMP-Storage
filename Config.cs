@@ -4,10 +4,10 @@ class Config {
   /// 
 
   // The number of blocks to create
-  public static int BLOCK_COUNT = 1;
+  public static int BLOCK_COUNT = 12;
 
   // The size of each block in bytes
-  public static int BLOCK_SIZE = 32;
+  public static int BLOCK_SIZE = 512;
 
   // Timeout of reads in milliseconds
   public static int READ_TIMEOUT = 5000;
