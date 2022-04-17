@@ -4,7 +4,7 @@ class Config {
   /// 
 
   // The number of blocks to create
-  public static int BLOCK_COUNT = 12;
+  public static int BLOCK_COUNT = 32;
 
   // The size of each block in bytes
   public static int BLOCK_SIZE = 512;
