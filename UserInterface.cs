@@ -6,19 +6,19 @@ class UserInterface {
       while(true) {
         // Show input possibilities
         Console.WriteLine("\nChoose an option:");
-        Console.WriteLine("1. Write to a block");
-        Console.WriteLine("2. Read a block");
+        Console.WriteLine("1. Write data");
+        Console.WriteLine("2. Read range");
         Console.WriteLine("3. Exit");
         Console.Write("\n> ");
 
         // Get user input
         var input = Console.ReadLine();
 
-        // Write to a block
-        if (input == "1") writeToBlock();
+        // Write data
+        if (input == "1") writeData();
 
-        // Read a block
-        else if (input == "2") readBlock();
+        // Read data from a range
+        else if (input == "2") readRange();
 
         // Exit
         else if (input == "3") {
@@ -29,6 +29,7 @@ class UserInterface {
     }).Start();
   }
 
+  // Select a block
   private Block selectBlock() {
     Console.WriteLine("\nChoose a block:");
     for (int i = 0; i < Config.blocks.Length; i++)
@@ -38,16 +39,20 @@ class UserInterface {
     return Config.blocks[blockId];
   }
 
-  private void writeToBlock() {
+  // Write data
+  private void writeData() {
     var block = selectBlock();
     block.writeToBlock(0, Encoding.UTF8.GetBytes("Hello World"));
   }
 
-  private void readBlock() {
+  // Read a range of data
+  private void readRange() {
+    // Ask for read offset
     Console.WriteLine("\nRead offset:");
     Console.Write("\n> ");
     var offset = int.Parse(Console.ReadLine());
 
+    // Ask for a read size
     Console.WriteLine("\nRead size:");
     Console.Write("\n> ");
     var size = int.Parse(Console.ReadLine());

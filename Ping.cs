@@ -1,9 +1,11 @@
 using System.Net.NetworkInformation;
 
 class Ping {
+  // Event invoked when a ping response is received
   public delegate void EventHandler(string ip, Block block, byte[] data);
   public event EventHandler? OnReceive;
 
+  // Send a payload to a specific ip via ping
   public void sendData(string ip, Block block, byte[] data)
   {
     new Thread(() => {

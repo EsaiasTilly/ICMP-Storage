@@ -1,16 +1,25 @@
 using System.Text;
 
 class Read {
+  // Event is invoked when a read is completed
   public delegate void EventHandler(byte[] data);
   public event EventHandler? OnReceive;
-  public int offset, length;
+
+  // Read range
+  public Range range;
+
+  // Read buffer
   public byte[] data;
+
+  // List of affected blocks
   public List<int> affected_blocks = new List<int>();
+
+  // Indicates if the read has been completed
   private bool compelted = false;
 
+  // Constructor
   public Read(int offset, int length) {
-    this.offset = offset;
-    this.length = length;
+    this.range = new Range(offset, offset + length);
     this.data = new byte[length];
 
     // Add all affected blocks
@@ -27,8 +36,8 @@ class Read {
   public bool addData(int block_id, byte[] data, int offset) {
     if (compelted || !affected_blocks.Contains(block_id)) return false;
 
-    int writeIndex = offset > this.offset ? offset - this.offset : 0;
-    int readIndex = offset > this.offset ? 0 : this.offset - offset;
+    int writeIndex = offset > this.range.start ? offset - this.range.start : 0;
+    int readIndex = offset > this.range.start ? 0 : this.range.start - offset;
 
     for (int i = 0; writeIndex < this.data.Length && readIndex < data.Length; writeIndex++, readIndex++, i++) {
       this.data[writeIndex] = data[readIndex];

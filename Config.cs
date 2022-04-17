@@ -1,9 +1,21 @@
 class Config {
-  // Static config
+  /// 
+  /// Static config
+  /// 
+
+  // The number of blocks to create
   public static int BLOCK_COUNT = 1;
+
+  // The size of each block in bytes
   public static int BLOCK_SIZE = 32;
+
+  // Timeout of reads in milliseconds
   public static int READ_TIMEOUT = 5000;
+
+  // Nr of ips to assign to each block
   public static int IPS_PER_BLOCK = 2;
+
+  // The ips to use
   public static List<string> IPS = new List<string>() {
     // Google IPs
     "172.253.62.100",
@@ -26,8 +38,16 @@ class Config {
     "52.94.225.242"
   };
 
-  // Dynamic config
+  /// 
+  /// Dynamic config
+  /// 
+
+  // Indicates if the program is running
   public static bool running = true;
+
+  // List of blocks
   public static Block[] blocks = new Block[BLOCK_COUNT];
+
+  // List of read requests
   public static List<Read> reads = new List<Read>();
 }

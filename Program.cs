@@ -27,11 +27,16 @@ class Program {
     waitForFirstWrites();
   }
 
+  // Wait for first block writes
   private static void waitForFirstWrites() {
     new Thread(() => {
       while(Config.running) {
+        // Go through all blocks
         foreach(var block in Config.blocks) {
+          // Skip if block has no writes
           if (block.writes.Count == 0) continue;
+
+          // Skip if block has been written to
           if (block.writtenTo) continue;
 
           // Send first pings
@@ -46,11 +51,13 @@ class Program {
           block.writes.RemoveAt(0);
         }
 
+        // Sleep
         Thread.Sleep(50);
       }
     }).Start();
   }
 
+  // Handle a ping callback
   public static void RecievePing(string ip, Block block, byte[] data) {
     //Console.WriteLine("{0}: {1}", ip, Encoding.UTF8.GetString(data));
 
