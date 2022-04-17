@@ -5,54 +5,63 @@ class UserInterface {
 
   public UserInterface() {
     new Thread(() => {
+      // Display motd
+      Console.WriteLine("Welcome to ICMP-Storage!");
+      Console.WriteLine("\nThe file system is stored on the internet using");
+      Console.WriteLine("the ICMP protocol.\n");
+      Console.WriteLine("Type 'help' for a list of commands.");
+
+      // Start listening for user input
       while(true) {
-        
+        Console.Write(currentPath + "> ");
+        string input = Console.ReadLine();
+
+        string command = input.Split(' ')[0];
+        string[] arguments = input.Split(' ').Skip(1).ToArray();
+
+        switch(command) {
+          case "help":
+            Console.WriteLine("help - Display this help message");
+            Console.WriteLine("ls - List files and directories");
+            Console.WriteLine("cd - Change directory");
+            Console.WriteLine("cat - Display file contents");
+            Console.WriteLine("write - Write to a file");
+            Console.WriteLine("exit - Exit the program");
+            break;
+          case "mkdir":
+            FileSystem.MakeDirectory(Path.Combine(currentPath, arguments[0]));
+            break;
+          case "ls":
+            this.ls();
+            break;
+          case "cd":
+            break;
+          case "nano":
+            break;
+          case "write":
+            break;
+          case "exit":
+            Environment.Exit(0);
+            break;
+          default:
+            Console.WriteLine("Unknown command");
+            break;
+        }
       }
     }).Start();
   }
 
-  // Select a block
-  private Block selectBlock() {
-    Console.WriteLine("\nChoose a block:");
-    for (int i = 0; i < Config.blocks.Length; i++)
-      Console.WriteLine("{0}. {1}", i, Config.blocks[i]);
-    Console.Write("\n> ");
-    var blockId = int.Parse(Console.ReadLine());
-    return Config.blocks[blockId];
-  }
+  private void ls() {
+    var fs = FileSystem.ReadFilePointers();
+    
+    // Print all directories
+    foreach(var dir in fs.directories) {
+      Console.WriteLine(dir);
+    }
 
-  // Write data
-  private void writeData() {
-    var block = selectBlock();
-    block.writeToBlock(0, Encoding.UTF8.GetBytes("Hello World"));
-  }
-
-  // Read a range of data
-  private void readRange() {
-    // Ask for read offset
-    Console.WriteLine("\nRead offset:");
-    Console.Write("\n> ");
-    var offset = int.Parse(Console.ReadLine());
-
-    // Ask for a read size
-    Console.WriteLine("\nRead size:");
-    Console.Write("\n> ");
-    var size = int.Parse(Console.ReadLine());
-
-    // Create read request
-    var read = new Read(offset, size);
-    var readRecieved = false;
-    read.OnReceive += (byte[] data) => {
-      Console.WriteLine("\nRead data:");
-      Console.WriteLine(Encoding.UTF8.GetString(data));
-      readRecieved = true;
-    };
-    Config.reads.Add(read);
-
-    // Wait for read to be recieved
-    double start = DateTime.Now.TimeOfDay.TotalMilliseconds;
-    while(!readRecieved && DateTime.Now.TimeOfDay.TotalMilliseconds - start < Config.READ_TIMEOUT) {
-      Thread.Sleep(50);
+    // Print all files
+    foreach(var file in fs.files) {
+      Console.WriteLine(file.path);
     }
   }
 }

@@ -17,6 +17,9 @@ class Read {
   // Indicates if the read has been completed
   private bool compelted = false;
 
+  // Indicates when the read was started
+  double start_time;
+
   // Constructor
   public Read(int offset, int length) {
     this.range = new Range(offset, offset + length);
@@ -31,6 +34,16 @@ class Read {
         affected_blocks.Add(block.id);
       }
     }
+
+    // Set the start time
+    start_time = DateTime.Now.TimeOfDay.TotalMilliseconds;
+  }
+
+  public byte[] waitForReceive() {
+    while (!compelted &&  DateTime.Now.TimeOfDay.TotalMilliseconds - start_time <= Config.READ_TIMEOUT) {
+      Thread.Sleep(150);
+    }
+    return data;
   }
 
   public bool addData(int block_id, byte[] data, int offset) {

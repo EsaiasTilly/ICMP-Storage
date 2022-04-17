@@ -1,4 +1,6 @@
-﻿class Program {
+﻿using System.Text;
+
+class Program {
   private static Ping ping = new Ping();
 
   public static void Main() {
@@ -28,6 +30,9 @@
 
     // Wait for first writes
     waitForFirstWrites();
+
+    // Create root directory
+    FileSystem.MakeDirectory("/");
   }
 
   // Wait for first block writes
@@ -62,17 +67,30 @@
 
   // Handle a ping callback
   public static void RecievePing(string ip, Block block, byte[] data) {
-    //Console.WriteLine("{0}: {1}", ip, Encoding.UTF8.GetString(data));
+    Console.WriteLine("{0}: {1}", ip, Encoding.UTF8.GetString(data));
 
     // Apply any writes
-    foreach(var write in block.writes) {
-      if (write.ips_left.Contains(ip)) {
-        write.ips_left.Remove(ip);
-        data = DataMerge.Merge(data, write.data, write.offset);
-      }
+    int tries = 0;
+    for (int i = 0; i < block.writes.Count; i++) {
+      try
+      {
+        var write = block.writes[i];
+        if (write.ips_left.Contains(ip)) {
+          write.ips_left.Remove(ip);
+          data = DataMerge.Merge(data, write.data, write.offset);
+        }
 
-      if (write.ips_left.Count == 0) {
-        block.writes.Remove(write);
+        if (write.ips_left.Count == 0) {
+          block.writes.Remove(write);
+        }
+      }
+      catch {
+        i = 0;
+        tries++;
+        if (tries > 10) {
+          Console.WriteLine("Failed to apply write to block {0}", block.id);
+          break;
+        }
       }
     }
 
