@@ -35,6 +35,7 @@ class UserInterface {
             this.ls();
             break;
           case "cd":
+            this.cd(arguments[0]);
             break;
           case "nano":
             break;
@@ -62,6 +63,17 @@ class UserInterface {
     // Print all files
     foreach(var file in fs.files) {
       Console.WriteLine(file.path);
+    }
+  }
+
+  private void cd(string relPath) {
+    var fs = FileSystem.ReadFilePointers();
+
+    // Check if directory exists
+    if(fs.directories.Contains(Path.Combine(currentPath, relPath))) {
+      currentPath = Path.Combine(currentPath, relPath);
+    } else {
+      Console.WriteLine("Directory does not exist");
     }
   }
 }
