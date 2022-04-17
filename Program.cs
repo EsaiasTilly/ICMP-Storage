@@ -67,13 +67,14 @@ class Program {
 
   // Handle a ping callback
   public static void RecievePing(string ip, Block block, byte[] data) {
-    Console.WriteLine("{0}: {1}", ip, Encoding.UTF8.GetString(data));
+    //Console.WriteLine("{0}: {1}", ip, Encoding.UTF8.GetString(data));
 
     // Apply any writes
     int tries = 0;
     for (int i = 0; i < block.writes.Count; i++) {
       try
       {
+        if (block.writes.Count <= i) return;
         var write = block.writes[i];
         if (write.ips_left.Contains(ip)) {
           write.ips_left.Remove(ip);

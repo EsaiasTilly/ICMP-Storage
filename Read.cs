@@ -18,7 +18,10 @@ class Read {
   private bool compelted = false;
 
   // Indicates when the read was started
-  double start_time;
+  private double start_time;
+
+  // Indicates if the read is busy
+  private bool busy = false;
 
   // Constructor
   public Read(int offset, int length) {
@@ -49,6 +52,9 @@ class Read {
   public bool addData(int block_id, byte[] data, int offset) {
     if (compelted || !affected_blocks.Contains(block_id)) return false;
 
+    while(busy) Thread.Sleep(50);
+    this.busy = true;
+
     int writeIndex = offset > this.range.start ? offset - this.range.start : 0;
     int readIndex = offset > this.range.start ? 0 : this.range.start - offset;
 
@@ -62,9 +68,11 @@ class Read {
       OnReceive?.Invoke(this.data);
       this.compelted = true;
       Config.reads.Remove(this);
+      this.busy = false;
       return true;
     }
 
+    this.busy = false;
     return false;
   }
 }
